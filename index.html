@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentação Ágil - SAGA de Transferência Bancária</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Configuração de Fonte Padrão */
+        :root {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilo da barra de status (simulando JIRA) */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            border-radius: 9999px;
+            font-size: 0.75rem; /* text-xs */
+            font-weight: 600; /* font-semibold */
+            text-transform: uppercase;
+        }
+        .status-in-progress {
+            background-color: #e6e6ff; /* Light purple */
+            color: #4a4aff; /* Blue-purple */
+        }
+        .status-ready {
+            background-color: #f7e6ff; /* Light pink-purple */
+            color: #9333ea; /* Purple */
+        }
+        .status-done {
+            background-color: #d1fae5; /* Light green */
+            color: #059669; /* Emerald green */
+        }
+        /* Estilos de ícones para colapsáveis */
+        .chevron-up, .chevron-down {
+            transition: transform 0.3s ease;
+        }
+        .collapsed .chevron-down {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header Simples (Jira-like) -->
+    <header class="bg-white shadow-md p-4 sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <h1 class="text-xl font-bold text-gray-800">Projeto: Banco Digital - Microsserviços</h1>
+            <span class="text-sm text-gray-500">Documentação Ágil</span>
+        </div>
+    </header>
+
+    <!-- Main Content - Vista do Card/Tarefa -->
+    <main class="max-w-4xl mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Detalhes do Título e Status -->
+        <section class="mb-6 bg-white p-6 rounded-lg shadow-md">
+            <div class="flex items-center space-x-4 mb-4">
+                <!-- Ícone da Tarefa -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                <h2 class="text-3xl font-extrabold text-gray-900">SAGA_TRANSFER-101: Implementar SAGA de Orquestração para Transferência</h2>
+            </div>
+            
+            <div class="flex flex-wrap items-center space-x-4 text-sm text-gray-600">
+                <div class="status-badge status-in-progress">Em Desenvolvimento</div>
+                <span>**Prioridade:** Alta</span>
+                <span>**Contexto Delimitado:** Transferências & Contas</span>
+            </div>
+        </section>
+        
+        <!-- Documentação em Seções Colapsáveis -->
+        <div id="documentation-sections" class="space-y-4">
+
+            <!-- 1. User Stories e UX/UI -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-stories')">
+                    <h3 class="text-lg font-semibold text-gray-800">1. User Stories & UX/UI (O Quê e Por Que)</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-stories" class="doc-content hidden p-4 pt-0">
+                    <h4 class="font-medium text-gray-700 mt-2 mb-1">User Story Principal:</h4>
+                    <p class="text-gray-600 mb-3">Como **cliente**, eu quero transferir fundos da minha Conta A para a Conta B de forma segura para que o dinheiro seja creditado no destino, com garantia de estorno em caso de falha.</p>
+                    
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Jornada UX/UI:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+                        <li>Tela de Solicitação: Coleta de Conta Origem, Conta Destino, Valor e Senha.</li>
+                        <li>Tela de Confirmação: Exibe resumo e pede aprovação final.</li>
+                        <li>Feedback de Sucesso: Mensagem "Transferência Concluída".</li>
+                        <li>Feedback de Falha: Mensagem "Transferência Recusada. O valor foi estornado integralmente para sua conta."</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 2. Diagramas e Arquitetura SAGA -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-saga')">
+                    <h3 class="text-lg font-semibold text-gray-800">2. Arquitetura SAGA de Orquestração (O Fluxo Crítico)</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-saga" class="doc-content hidden p-4 pt-0">
+                    <p class="text-gray-600 mb-4">O Orquestrador gerencia o estado da transferência e envia comandos sequenciais aos microsserviços.</p>
+                    
+                    <h4 class="font-medium text-gray-700 mt-2 mb-1">Microsserviços Envolvidos:</h4>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 mb-4">
+                        <li>**Transações:** Inicia o SAGA.</li>
+                        <li>**Orquestrador:** State Machine (máquina de estados) central.</li>
+                        <li>**Contas:** Gerencia débitos, créditos e estornos.</li>
+                        <li>**Fraude:** Analisa o risco (ponto de decisão).</li>
+                        <li>**Message Broker:** Apache Kafka (comunicação assíncrona via Comandos e Eventos).</li>
+                    </ul>
+
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Diagramas UML e Fluxos:</h4>
+                    
+                    <h5 class="text-sm font-semibold text-purple-700 mt-3 mb-1">Diagrama de Componentes (Visão Estrutural)</h5>
+                    <p class="text-xs text-gray-600 mb-2">Mostra a relação de dependência e comunicação dos sistemas principais.</p>
+                    
+                    <div class="text-xs text-gray-500 border border-gray-200 p-2 rounded-md bg-white">
+                        Cliente $\to$ Microsserviço Transações $\to$ Message Broker (Tópico de Solicitação)<br>
+                        Orquestrador $\leftrightarrow$ Message Broker (Comandos/Eventos)<br>
+                        Contas $\leftrightarrow$ Message Broker (Comandos/Eventos)<br>
+                        Fraude $\leftrightarrow$ Message Broker (Comandos/Eventos)
+                    </div>
+
+                    <h5 class="text-sm font-semibold text-purple-700 mt-4 mb-1">Diagrama de Sequência - Fluxo de Sucesso</h5>
+                    <p class="text-xs text-gray-600 mb-2">Detalha a troca de mensagens para uma transferência concluída com sucesso.</p>
+                    
+                    <div class="text-xs text-gray-600 border border-gray-200 p-3 rounded-md bg-gray-50">
+                        1. **Orquestrador** $\to$ **Contas**: Comando `DebitarFundos`. (Estado: `DEBITO_PENDENTE`)<br>
+                        2. **Contas** $\to$ **Orquestrador**: Evento `FundosDebitoSucesso`. (Estado: `ANALISE_FRAUDE`)<br>
+                        3. **Orquestrador** $\to$ **Fraude**: Comando `AnalisarTransferencia`.<br>
+                        4. **Fraude** $\to$ **Orquestrador**: Evento `AnaliseFraudeAprovada`. (Estado: `CREDITO_PENDENTE`)<br>
+                        5. **Orquestrador** $\to$ **Contas**: Comando `CreditarFundos`.<br>
+                        6. **Contas** $\to$ **Orquestrador**: Evento `TransferenciaSucesso`. (Estado: `CONCLUIDA`)
+                    </div>
+
+                    <h5 class="text-sm font-semibold text-red-700 mt-4 mb-1">Diagrama de Sequência - Fluxo de Compensação (Falha)</h5>
+                    <p class="text-xs text-gray-600 mb-2">Mostra a ação compensatória quando a análise de fraude falha, desfazendo o débito anterior.</p>
+                    
+                    <div class="text-xs text-gray-600 border border-red-200 p-3 rounded-md bg-red-50">
+                        ... (Passos 1 e 2 executados: Fundos debitados) ...<br>
+                        3. **Orquestrador** $\to$ **Fraude**: Comando `AnalisarTransferencia`.<br>
+                        4. **Fraude** $\to$ **Orquestrador**: Evento **`AnaliseFraudeRecusada`** (Falha).<br>
+                        5. **Orquestrador** $\to$ **Contas**: Comando **`EstornarFundos`** (Compensação).<br>
+                        6. **Contas** $\to$ **Orquestrador**: Evento `TransferenciaCancelada`. (Estado: `CANCELADA_COMPENSADA`)
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3. Especificações Funcionais (EF) -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-ef')">
+                    <h3 class="text-lg font-semibold text-gray-800">3. Especificações Funcionais (Regras de Negócio)</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-ef" class="doc-content hidden p-4 pt-0">
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>**EF-01 (Orquestração):** O Orquestrador DEVE ser capaz de persistir o estado atual da SAGA para se recuperar de falhas.</li>
+                        <li>**EF-02 (Atomicidade):** A transação deve garantir que um débito seja sempre seguido por um crédito OU um estorno (ação compensatória).</li>
+                        <li>**EF-03 (Compensação):** Se a `AnaliseFraude` recusar a transação, o Orquestrador DEVE emitir o comando `EstornarFundos` para a conta de origem, garantindo que o saldo seja restaurado.</li>
+                        <li>**EF-04 (Idempotência):** Todos os microsserviços (Contas, Fraude) DEVEM ser idempotentes, ou seja, processar o mesmo comando ou evento múltiplas vezes sem efeitos colaterais.</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- 4. Especificações Não Funcionais (ENF) -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-enf')">
+                    <h3 class="text-lg font-semibold text-gray-800">4. Especificações Não Funcionais (Qualidade e Restrições)</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-enf" class="doc-content hidden p-4 pt-0">
+                    <ul class="list-disc list-inside space-y-2 text-gray-600">
+                        <li>**Latência (Performance):** A latência da transferência de ponta a ponta (envio $\to$ confirmação) NÃO deve exceder **3 segundos** em 95% dos casos.</li>
+                        <li>**Disponibilidade:** Uptime mínimo de **99.99%** para os microsserviços Contas e Orquestrador.</li>
+                        <li>**Tecnologia:** Uso obrigatório de **Contêineres (Docker)** e orquestração via **Kubernetes**.</li>
+                        <li>**Persistência:** Cada microsserviço deve utilizar seu próprio banco de dados (BD por Serviço).</li>
+                        <li>**Segurança:** Todas as APIs e a comunicação interna do broker devem usar TLS/SSL.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 5. TDD e Análise de Impacto -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-tdd')">
+                    <h3 class="text-lg font-semibold text-gray-800">5. TDD, CI/CD e Análise de Impacto</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-tdd" class="doc-content hidden p-4 pt-0">
+                    <h4 class="font-medium text-gray-700 mt-2 mb-1">Foco do TDD no Orquestrador:</h4>
+                    <p class="text-gray-600 text-sm mb-3">O TDD é crítico para validar todas as transições da máquina de estados. Priorizar:</p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 ml-4">
+                        <li>Testes que garantam a transição correta de estados (Ex: `FundosDebitoSucesso` $\to$ `ANALISE_FRAUDE`).</li>
+                        <li>Testes que validem a **lógica de compensação** em resposta a falhas (Ex: `AnaliseFraudeRecusada` dispara comando `EstornarFundos`).</li>
+                    </ul>
+
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Análise de Impacto (Risco):</h4>
+                    <p class="text-red-700 text-sm font-semibold mb-2">Risco: Falha de conectividade com o Message Broker.</p>
+                    <p class="text-gray-600 text-sm mb-3">**Mitigação:** O Orquestrador e os Microsserviços devem implementar o padrão **Retry Logic** com *Exponential Backoff*. O Orquestrador deve tentar re-enviar comandos críticos por até N vezes antes de acionar a SAGA de compensação.</p>
+
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Estratégia CI/CD:</h4>
+                    <p class="text-gray-600 text-sm">Cada microsserviço terá seu pipeline de CI/CD independente. O CI gera a **Docker Image** (artefato de implantação), e o CD utiliza o Kubernetes para executar implantações automatizadas (Blue/Green ou Canary) na produção.</p>
+                </div>
+            </div>
+
+            <!-- 6. Análise Lean Six Sigma e Melhoria Contínua (NOVA SEÇÃO) -->
+            <div class="doc-card">
+                <button type="button" class="doc-header" onclick="toggleCollapse('section-lss')">
+                    <h3 class="text-lg font-semibold text-gray-800">6. Análise Lean Six Sigma e Melhoria Contínua</h3>
+                    <svg class="chevron-down h-5 w-5 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" /></svg>
+                </button>
+                <div id="section-lss" class="doc-content hidden p-4 pt-0">
+                    
+                    <h4 class="font-medium text-gray-700 mt-2 mb-1">Aplicação dos Princípios Lean (Eliminação de Desperdício - Muda)</h4>
+                    <p class="text-sm text-gray-600 mb-2">O design de microsserviços e o uso de Mensageria visam atacar desperdícios (TIM WOODS) inerentes a arquiteturas monolíticas:</p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 ml-4">
+                        <li>**Espera (Waiting):** Eliminada pelo uso de Mensageria Assíncrona. Os serviços não precisam esperar por respostas síncronas; eles reagem a eventos, otimizando o tempo total da transação.</li>
+                        <li>**Super-processamento (Over-processing):** O DDD (Contextos Delimitados) garante que cada serviço faça **apenas** o trabalho que é de sua responsabilidade (ex: Fraude faz só análise, Contas faz só saldo), evitando lógica desnecessária em um monolito.</li>
+                        <li>**Defeitos (Defects):** A **Lógica de Compensação (SAGA)** é o mecanismo formal para tratar o desperdício de "Defeito" imediatamente, garantindo que o impacto financeiro seja zero (estorno).</li>
+                        <li>**Fluxo Contínuo:** A transação é modelada como um fluxo ininterrupto de comandos e eventos, movendo-se rapidamente do débito ao crédito.</li>
+                    </ul>
+
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Aplicação dos Princípios Six Sigma (Redução de Variação)</h4>
+                    <p class="text-sm text-gray-600 mb-2">O foco aqui é garantir a consistência e a previsibilidade da transação:</p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 ml-4">
+                        <li>**CTQ (Critical To Quality):** O principal CTQ é a **"Consistência Final do Saldo"**. O Orquestrador é o mecanismo de controle que garante que este CTQ seja atendido em 100% das vezes (Sucesso ou Compensação).</li>
+                        <li>**Redução de Variação:** A **Máquina de Estados** do Orquestrador elimina a variação na forma como as transações são processadas. Cada estado (ex: `DEBITO_PENDENTE`) só pode transitar para um conjunto estrito de próximos estados válidos, eliminando caminhos de erro não previstos.</li>
+                        <li>**Medição (DPMO):** A métrica de qualidade será o DPMO para **falhas na compensação**. O alvo é DPMO próximo de zero, indicando que o mecanismo de estorno está funcionando perfeitamente.</li>
+                    </ul>
+
+                    <h4 class="font-medium text-gray-700 mt-4 mb-1">Melhoria Contínua (Modelo PDSA)</h4>
+                    <p class="text-sm text-gray-600 mb-2">O ciclo PDSA será usado para refinar as soluções antes da implementação completa.</p>
+                    <ul class="list-disc list-inside space-y-1 text-sm text-gray-600 ml-4">
+                        <li>**Exemplo de PDSA:**
+                            * **P (Planear):** Testar um novo *timeout* de 500ms para o comando `AnalisarTransferencia`. Previsão: Reduzir a latência média em 100ms.
+                            * **D (Fazer):** Implantar o novo *timeout* em um ambiente Beta (tráfego de 1%).
+                            * **S (Estudar):** Medir a latência real e comparar com a previsão. Se a variação aumentar, a mudança falhou.
+                            * **A (Agir):** Se bem-sucedido, **Adotar** e implantar para 100% do tráfego. Se falhar, **Abandonar** ou **Adaptar** (ex: testar 600ms).
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- JavaScript para Funcionalidade de Colapsar -->
+    <script>
+        // Função para alternar a visibilidade da seção e girar o ícone
+        function toggleCollapse(id) {
+            const content = document.getElementById(id);
+            const header = content.previousElementSibling;
+            
+            // Alterna a classe 'hidden' para mostrar/esconder o conteúdo
+            content.classList.toggle('hidden');
+            
+            // Alterna a classe 'collapsed' no cabeçalho para girar o chevron
+            header.classList.toggle('collapsed');
+        }
+
+        // Abrir a primeira seção por padrão para dar uma visão inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            const firstContent = document.querySelector('.doc-content');
+            const firstHeader = document.querySelector('.doc-header');
+            if (firstContent && firstHeader) {
+                firstContent.classList.remove('hidden');
+                firstHeader.classList.remove('collapsed');
+            }
+        });
+    </script>
+
+    <!-- Estilos específicos para os cards de documentação (incluídos no JS para simplificação) -->
+    <script>
+        document.querySelectorAll('.doc-card').forEach(card => {
+            card.classList.add('bg-white', 'rounded-lg', 'shadow-md', 'overflow-hidden');
+        });
+        document.querySelectorAll('.doc-header').forEach(header => {
+            header.classList.add('flex', 'justify-between', 'items-center', 'w-full', 'p-4', 'hover:bg-gray-100', 'transition-colors', 'focus:outline-none', 'collapsed');
+        });
+    </script>
+</body>
+</html>
